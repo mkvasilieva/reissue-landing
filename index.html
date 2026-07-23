@@ -259,8 +259,19 @@ body.nav-1 .nav .nav-est{grid-column:3;grid-row:1;justify-self:end}
 body.nav-1 .nav .nav-join{display:none}
 /* ===== PAGE SANS: Bricolage Grotesque (locked in) ===== */
 /* ===== HOW-IT-WORKS CARD ILLUSTRATIONS ===== */
-.how .st-card{overflow:visible;display:flex;align-items:center;justify-content:center;padding:0}
-.how .st-illo{width:100%;height:auto;aspect-ratio:393/852;object-fit:cover;object-position:top center;display:block;border-radius:20px;box-shadow:0 14px 32px rgba(16,12,17,.16),0 3px 8px rgba(16,12,17,.08)}
+.how .st-card{position:relative;overflow:hidden;display:block;padding:0;height:300px}
+.how .st-card::before{content:"";position:absolute;left:0;top:0;width:100%;
+  aspect-ratio:393/852;box-sizing:border-box;
+  border:1px solid rgba(16,12,17,.14);border-radius:20px;
+  pointer-events:none;z-index:1}
+.how .st-card::after{content:"";position:absolute;left:0;right:0;bottom:0;height:48px;
+  background:linear-gradient(to bottom, rgba(243,238,226,0) 0%, var(--cream) 100%);
+  pointer-events:none;z-index:2}
+@media(max-width:820px){
+  .how .st-card{height:330px}
+  .how .st-card::after{height:52px}
+}
+.how .st-illo{width:100%;height:auto;aspect-ratio:393/852;object-fit:cover;object-position:top center;display:block;border-radius:20px}
 </style></head><body class="nav-1">
 
 
@@ -293,7 +304,7 @@ body.nav-1 .nav .nav-join{display:none}
     <div class="st">
       <div class="st-card" aria-hidden="true"><img class="st-illo" src="step-2-working.webp" srcset="step-2-working.webp 393w, step-2-working@2x.webp 786w, step-2-working@3x.webp 1182w" sizes="(max-width:820px) 250px, 234px" width="393" height="852" alt="App screen showing the video being read and posts being written" loading="lazy" decoding="async"/></div>
       <h3>It writes the assets,<br>not suggestions.</h3>
-      <p>Reissue reshapes your video into finished, platform-ready content, applying the latest best practices for each channel — and keeping them current as platforms change.</p>
+      <p>Reissue reshapes your video into finished, platform-ready content, applying the latest best practices for each channel, and keeping them current as platforms change.</p>
     </div>
     <div class="st">
       <div class="st-card" aria-hidden="true"><img class="st-illo" src="step-3-ready.webp" srcset="step-3-ready.webp 393w, step-3-ready@2x.webp 786w, step-3-ready@3x.webp 1182w" sizes="(max-width:820px) 250px, 234px" width="393" height="852" alt="App screen showing finished Instagram, TikTok and email versions ready to approve" loading="lazy" decoding="async"/></div>
