@@ -272,11 +272,20 @@ body.nav-1 .nav .nav-join{display:none}
   .how .st-card::after{height:52px}
 }
 .how .st-illo{width:100%;height:auto;aspect-ratio:393/852;object-fit:cover;object-position:top center;display:block;border-radius:20px}
+/* ===== STICKY HEADER + BETA BUTTON (28 Oct 2026) ===== */
+html{scroll-padding-top:84px}
+body.nav-1 > .nav{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;position:sticky;top:0;z-index:50;background:var(--cream);border-bottom:1px solid var(--ink)}
+body.nav-1 > .nav .nav-cta{grid-column:3;grid-row:1;justify-self:end;font-family:var(--work);text-transform:none;letter-spacing:0;font-size:15px;background:var(--ink);color:var(--cream);border-radius:999px;padding:10px 18px;text-decoration:none;white-space:nowrap}
+body.nav-1 > .nav .nav-cta:hover{background:var(--cobalt)}
+.hero{min-height:calc(100svh - 72px)}
+@media(max-width:820px){body.nav-1 > .nav{padding:12px 16px}body.nav-1 > .nav .nav-cta{font-size:14px;padding:9px 14px}html{scroll-padding-top:70px}}
+/* white step cards so the cream phone screens stand apart */
+.how .st{background:#fff}
+.how .st-card::after{background:linear-gradient(to bottom, rgba(255,255,255,0) 0%, #fff 100%)}
 </style></head><body class="nav-1">
 
 
-<header class="b-cream hero">
-  <nav class="nav">
+<nav class="nav">
     <div class="brand">&reg;</div>
     <div class="n">
       <a href="#how">How it works</a>
@@ -284,32 +293,33 @@ body.nav-1 .nav .nav-join{display:none}
       <a href="#faq">FAQ</a>
       <a href="#join" class="nav-join">Join</a>
     </div>
-    <div class="nav-est">Est. 2026</div>
+    <a href="#join" class="nav-cta">Join the beta</a>
   </nav>
-  <h1>Every founder's<br><span class="l2">social team.</span></h1>
-  <div class="pill-wrap"><p class="hero-explainer">You already have the ideas. Reissue does the rest.</p></div>
+<header class="b-cream hero">
+  <h1>A social team<br><span class="l2">in your pocket.</span></h1>
+  <div class="pill-wrap"><p class="hero-explainer">You have the ideas. Reissue does the rest.</p></div>
   <a href="#how" class="scroll-cue" aria-label="Scroll to how it works">
     <span class="scroll-arrow">&#8595;</span>
   </a>
 </header>
 
 <section class="b-sky block how" id="how">
-  <h2 class="sec">Your thinking in.<br>The right post out.</h2>
+  <h2 class="sec">Your thinking in.<br>The right content out.</h2>
   <div class="steps">
     <div class="st">
-      <div class="st-card" aria-hidden="true"><img class="st-illo" src="step-1.webp" srcset="step-1.webp 393w, step-1@2x.webp 786w, step-1@3x.webp 1179w" sizes="(max-width:820px) 250px, 234px" width="393" height="852" alt="Reissue asking for your hot take on startup branding, with a big button to tap and talk" loading="lazy" decoding="async"/></div>
+      <div class="st-card" aria-hidden="true"><img class="st-illo" src="step-1.webp" srcset="step-1.webp 393w, step-1@2x.webp 786w, step-1@3x.webp 1179w" sizes="(max-width:820px) 250px, 234px" width="393" height="852" alt="Reissue asking for your take on SaaS pricing, with a big button to tap and talk" loading="lazy" decoding="async"/></div>
       <h3>Capture ideas the moment<br>you have them.</h3>
-      <p>A voice note after a meeting, a thought on a walk, a photo of your notebook. Talk into your phone and Reissue keeps every idea, in your words. Setup takes two minutes: what you do, what to listen for, and your first hot take.</p>
+      <p>A voice note after a meeting, a thought on a walk, a photo of your notebook. Talk into your phone and Reissue keeps every idea, in your words. Setup takes two minutes: what you do, what to listen for, and your first voice note.</p>
     </div>
     <div class="st">
-      <div class="st-card" aria-hidden="true"><img class="st-illo" src="step-2.webp" srcset="step-2.webp 393w, step-2@2x.webp 786w, step-2@3x.webp 1179w" sizes="(max-width:820px) 250px, 234px" width="393" height="852" alt="A post opportunity: your idea about founders overcooking their brand lines up with this week's discussion" loading="lazy" decoding="async"/></div>
+      <div class="st-card" aria-hidden="true"><img class="st-illo" src="step-2.webp" srcset="step-2.webp 393w, step-2@2x.webp 786w, step-2@3x.webp 1179w" sizes="(max-width:820px) 250px, 234px" width="393" height="852" alt="A post opportunity: your idea about discounting first customers lines up with this week's discussion" loading="lazy" decoding="async"/></div>
       <h3>It knows when an<br>idea matters.</h3>
-      <p>Every morning, Reissue listens to what your industry is talking about online and checks it against everything you've said. When one of your ideas lines up, it flags it as a post opportunity and tells you why now.</p>
+      <p>Every morning, Reissue listens to what your industry is talking about online and checks it against everything you've said. When one of your ideas lines up, it flags it as a post opportunity and shows you the conversation it fits into.</p>
     </div>
     <div class="st">
-      <div class="st-card" aria-hidden="true"><img class="st-illo" src="step-3.webp" srcset="step-3.webp 393w, step-3@2x.webp 786w, step-3@3x.webp 1179w" sizes="(max-width:820px) 250px, 234px" width="393" height="852" alt="A LinkedIn post drafted from your own voice note, with Sounds like me and Approve and post" loading="lazy" decoding="async"/></div>
+      <div class="st-card" aria-hidden="true"><img class="st-illo" src="step-3.webp" srcset="step-3.webp 393w, step-3@2x.webp 786w, step-3@3x.webp 1179w" sizes="(max-width:820px) 250px, 234px" width="393" height="852" alt="A LinkedIn post drafted from a founder's own voice note, with Sounds like me and Approve and post" loading="lazy" decoding="async"/></div>
       <h3>Ready to post,<br>in your voice.</h3>
-      <p>Reissue drafts the post from your own words, shaped for the platform it's going on. You approve it from your phone. Nothing posts without you.</p>
+      <p>Reissue drafts the post from your own words, shaped for the platform it's going on. No AI slop: every line comes from something you actually said. You approve it from your phone, and nothing posts without you.</p>
     </div>
   </div>
 </section>
