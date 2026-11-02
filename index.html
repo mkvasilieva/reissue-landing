@@ -401,8 +401,9 @@ input:focus-visible,button:focus-visible,a:focus-visible,summary:focus-visible{o
 
 </div>
 <script>
-// Waitlist: one step on the page. Email first, then an optional first name.
-// Saved by the app (app.reissue.studio/api/waitlist) into Reissue's database.
+// Waitlist: one step on the page. Email first, then two optional questions:
+// what they'd post about (Reissue uses it to suggest who Marina lets in next)
+// and a first name. Saved by the app (app.reissue.studio/api/waitlist).
 (function(){
   var API='https://app.reissue.studio/api/waitlist';
   function send(data){
@@ -414,11 +415,20 @@ input:focus-visible,button:focus-visible,a:focus-visible,summary:focus-visible{o
     var input=f.querySelector('input[name=email]');
     var button=f.querySelector('button[type=submit]');
     var trap=f.querySelector('input[name=website]');
+    var lab=f.querySelector('label');
     var status=f.nextElementSibling&&f.nextElementSibling.hasAttribute('data-waitlist-status')?f.nextElementSibling:null;
     var source=f.getAttribute('data-waitlist')||'site';
     var email='';
     var step='email';
     function say(t){if(status)status.textContent=t;}
+    function become(name,placeholder,label,auto,btn,max){
+      input.type='text';input.name=name;input.autocomplete=auto;input.required=false;input.value='';
+      input.placeholder=placeholder;input.maxLength=max;if(lab)lab.textContent=label;button.textContent=btn;input.focus();
+    }
+    function askName(){
+      step='name';
+      become('name','Your first name (optional)','First name','given-name','Add',80);
+    }
     f.addEventListener('submit',function(e){
       e.preventDefault();
       var value=input.value.trim();
@@ -426,6 +436,7 @@ input:focus-visible,button:focus-visible,a:focus-visible,summary:focus-visible{o
         if(!value){input.focus();return;}
         email=value;
       } else if(!value){
+        if(step==='about'){askName();say("You're on the list. We'll email you when your spot's ready.");return;}
         f.style.display='none';
         return;
       }
@@ -433,22 +444,18 @@ input:focus-visible,button:focus-visible,a:focus-visible,summary:focus-visible{o
       var label=button.textContent;
       button.textContent=step==='email'?'Joining':'Saving';
       var data={email:email,source:source,website:trap?trap.value:''};
+      if(step==='about')data.about=value;
       if(step==='name')data.name=value;
       send(data).then(function(r){
         button.disabled=false;
         if(!r.ok){button.textContent=label;say(r.error||"That didn't send. Try again.");return;}
         if(step==='email'){
-          step='name';
-          input.type='text';
-          input.name='name';
-          input.autocomplete='given-name';
-          input.required=false;
-          input.value='';
-          input.placeholder='Your first name (optional)';
-          var lab=f.querySelector('label');if(lab)lab.textContent='First name';
-          button.textContent='Add';
-          say("You're on the list. We'll email you when your spot's ready.");
-          input.focus();
+          step='about';
+          become('about','What would you post about? (optional)','What would you post about?','off','Add',600);
+          say("You're on the list. Founders get in in small groups: tell us what you'd post about and we'll know who to let in first.");
+        } else if(step==='about'){
+          askName();
+          say("Thanks. Last one: your first name?");
         } else {
           f.style.display='none';
           say("Thanks, "+value+". You're on the list. We'll email you when your spot's ready.");
