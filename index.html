@@ -80,11 +80,12 @@ input:focus-visible,button:focus-visible,a:focus-visible,summary:focus-visible{o
   <div class="wrap" style="width: 100%; flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; padding-top: 104px">
     <h1 class="serif" style="margin: 0; font-size: clamp(48px, 7.6vw, 108px); line-height: 0.9; max-width: 960px">A social team in your back pocket.</h1>
     <p style="margin: 24px 0 0; font-size: 17px; line-height: 1.5; max-width: 560px; color: #D9D2C4">Talk into your phone. Reissue keeps every idea, tells you when one is worth posting, and writes it the way you talk.</p>
-    <form id="join-top" data-waitlist class="stack-sm" style="margin-top: 32px; display: flex; gap: 8px; width: 100%; max-width: 520px; background: #2A252C; border: 0; border-radius: 999px; padding: 6px">
+    <form id="join-top" data-waitlist="hero" class="stack-sm" style="margin-top: 32px; display: flex; gap: 8px; width: 100%; max-width: 520px; background: #2A252C; border: 0; border-radius: 999px; padding: 6px">
       <label for="email-top" style="position: absolute; left: -9999px">Email address</label>
+      <input name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0">
       <input id="email-top" type="email" name="email" autocomplete="email" required placeholder="you@yourcompany.com" style="flex: 1; min-width: 0; background: transparent; border: 0; color: #F3EEE2; font-family: inherit; font-size: 16px; padding: 0 18px; min-height: 48px; outline: none">
       <button type="submit" style="background: #F3EEE2; color: #100C11; border: 0; border-radius: 999px; font-family: inherit; font-size: 15px; font-weight: 600; padding: 0 22px; min-height: 48px; cursor: pointer">Get early access</button>
-    </form><div style="padding-top: 72px; padding-bottom: 104px; width: 100%; flex: none; text-align: left">
+    </form><p data-waitlist-status aria-live="polite" style="margin: 14px 0 0; font-size: 15px; line-height: 1.5; min-height: 1px; color: #D9D2C4"></p><div style="padding-top: 72px; padding-bottom: 104px; width: 100%; flex: none; text-align: left">
       <div class="bento">
 
         <div style="grid-column: 1 / span 8; grid-row: 1; background: #1E1920; border: 1px solid #3A343C; border-radius: 20px; padding: 0 22px; display: flex; align-items: center; gap: 16px; min-height: 96px">
@@ -375,11 +376,13 @@ input:focus-visible,button:focus-visible,a:focus-visible,summary:focus-visible{o
 <section id="join" style="background: #F3EEE2; padding: 140px 0; text-align: center">
   <div class="wrap">
     <h2 class="serif" style="margin: 0 auto; font-size: clamp(44px, 5.4vw, 80px); line-height: 0.95; max-width: 900px">Your next post is already on your phone.</h2>
-    <form data-waitlist class="stack-sm" style="margin: 44px auto 0; display: flex; gap: 8px; width: 100%; max-width: 520px; background: #E4DECF; border: 0; border-radius: 999px; padding: 6px">
+    <form data-waitlist="footer" class="stack-sm" style="margin: 44px auto 0; display: flex; gap: 8px; width: 100%; max-width: 520px; background: #E4DECF; border: 0; border-radius: 999px; padding: 6px">
       <label for="email-bottom" style="position: absolute; left: -9999px">Email address</label>
+      <input name="website" tabindex="-1" autocomplete="off" aria-hidden="true" style="position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0">
       <input id="email-bottom" type="email" name="email" autocomplete="email" required placeholder="you@yourcompany.com" style="flex: 1; min-width: 0; background: transparent; border: 0; color: #100C11; font-family: inherit; font-size: 16px; padding: 0 18px; min-height: 48px; outline: none">
       <button type="submit" style="background: #100C11; color: #F3EEE2; border: 0; border-radius: 999px; font-family: inherit; font-size: 15px; font-weight: 600; padding: 0 22px; min-height: 48px; cursor: pointer">Get early access</button>
     </form>
+    <p data-waitlist-status aria-live="polite" style="margin: 14px 0 0; font-size: 15px; line-height: 1.5; min-height: 1px; color: #100C11"></p>
     <p style="margin: 14px 0 0; font-size: 13px; color: #5E574D">Free for the first 100 founders until launch.</p>
   </div>
 </section>
@@ -397,20 +400,60 @@ input:focus-visible,button:focus-visible,a:focus-visible,summary:focus-visible{o
 </footer>
 
 </div>
-<script async src="https://tally.so/widgets/embed.js"></script>
 <script>
+// Waitlist: one step on the page. Email first, then an optional first name.
+// Saved by the app (app.reissue.studio/api/waitlist) into Reissue's database.
 (function(){
-  var FORM_ID='zxo7qZ';
+  var API='https://app.reissue.studio/api/waitlist';
+  function send(data){
+    return fetch(API,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(data)})
+      .then(function(r){return r.json().catch(function(){return {};}).then(function(j){return {ok:r.ok&&j.ok,error:j.error};});})
+      .catch(function(){return {ok:false,error:"That didn't send. Check your connection and try again."};});
+  }
   document.querySelectorAll('form[data-waitlist]').forEach(function(f){
+    var input=f.querySelector('input[name=email]');
+    var button=f.querySelector('button[type=submit]');
+    var trap=f.querySelector('input[name=website]');
+    var status=f.nextElementSibling&&f.nextElementSibling.hasAttribute('data-waitlist-status')?f.nextElementSibling:null;
+    var source=f.getAttribute('data-waitlist')||'site';
+    var email='';
+    var step='email';
+    function say(t){if(status)status.textContent=t;}
     f.addEventListener('submit',function(e){
       e.preventDefault();
-      var input=f.querySelector('input[type=email]');
-      var email=input?input.value.trim():'';
-      if(window.Tally&&Tally.openPopup){
-        Tally.openPopup(FORM_ID,{layout:'modal',width:440,hiddenFields:{email:email},autoClose:4000});
-      } else {
-        window.open('https://tally.so/r/'+FORM_ID,'_blank','noopener');
+      var value=input.value.trim();
+      if(step==='email'){
+        if(!value){input.focus();return;}
+        email=value;
+      } else if(!value){
+        f.style.display='none';
+        return;
       }
+      button.disabled=true;
+      var label=button.textContent;
+      button.textContent=step==='email'?'Joining':'Saving';
+      var data={email:email,source:source,website:trap?trap.value:''};
+      if(step==='name')data.name=value;
+      send(data).then(function(r){
+        button.disabled=false;
+        if(!r.ok){button.textContent=label;say(r.error||"That didn't send. Try again.");return;}
+        if(step==='email'){
+          step='name';
+          input.type='text';
+          input.name='name';
+          input.autocomplete='given-name';
+          input.required=false;
+          input.value='';
+          input.placeholder='Your first name (optional)';
+          var lab=f.querySelector('label');if(lab)lab.textContent='First name';
+          button.textContent='Add';
+          say("You're on the list. We'll email you when your spot's ready.");
+          input.focus();
+        } else {
+          f.style.display='none';
+          say("Thanks, "+value+". You're on the list. We'll email you when your spot's ready.");
+        }
+      });
     });
   });
 })();
